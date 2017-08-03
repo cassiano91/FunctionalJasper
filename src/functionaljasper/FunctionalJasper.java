@@ -1,21 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package functionaljasper;
 
-/**
- *
- * @author cassiano.melo
- */
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.collections.map.HashedMap;
+
 public class FunctionalJasper {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws Exception {
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> param = new HashedMap();
+
+        param.put("arquivoJasper", new Date().toString());
+        List<Object> qualificacoes = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            CodigoNome cn = new CodigoNome(""+i, "CodigoNome " + i);
+
+            qualificacoes.add(cn);
+        }
+
+        byte[] result = new Reports().generatePdfReport("teste_iReport", qualificacoes, param);
+
+        String data = String.valueOf(Calendar.getInstance().getTime().getTime());
+        String url = Reports.javaDir(Reports.class) + "/temp/" + data;
+
+        OutputStream out = new FileOutputStream(url + ".pdf");
+        out.write(result);
+        out.close();        
     }
-    
 }
